@@ -1,8 +1,8 @@
 FROM node:20-alpine as frontend-builder
 
 WORKDIR /app/frontend
-COPY personal-website/ ./
-RUN npm install
+COPY frontend/pietrozullo/ ./
+RUN npm install --legacy-peer-deps
 RUN npm run build
 
 FROM node:20-alpine as backend-builder
