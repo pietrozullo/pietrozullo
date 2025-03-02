@@ -4,32 +4,67 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Badge } from "../components/ui/badge";
 import { ArrowRightIcon } from "@radix-ui/react-icons";
 import { Separator } from "../components/ui/separator";
+import { HeroAnimation } from "../components/animation/HeroAnimation";
+import { useState, useEffect } from "react";
 
 export function HomePage() {
+  const [animationState, setAnimationState] = useState<'video' | 'transition' | 'completed'>('video');
+  const [hasAnimationPlayed, setHasAnimationPlayed] = useState(false);
+
+  // Check if animation has already played in this session
+  useEffect(() => {
+    const hasPlayed = sessionStorage.getItem('heroAnimationPlayed');
+    if (hasPlayed) {
+      setAnimationState('completed');
+      setHasAnimationPlayed(true);
+    }
+  }, []);
+
+  // Handle animation completion
+  const handleAnimationComplete = () => {
+    setAnimationState('completed');
+    sessionStorage.setItem('heroAnimationPlayed', 'true');
+  };
+
   return (
     <div className="flex flex-col gap-12 py-8 md:py-12">
-      {/* Hero Section */}
+      {/* Hero Section with Animation */}
       <section className="container py-12 md:py-24 lg:py-32">
-        <div className="flex flex-col items-center gap-4 text-center">
-          <Badge className="px-3.5 py-1.5 text-sm" variant="secondary">Mechanical Engineer & Roboticist</Badge>
-          <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl">
-            Pietro Zullo
-          </h1>
-          <p className="max-w-[700px] text-lg text-muted-foreground md:text-xl">
-            Specializing in robotics, motion planning, and full-stack development with Docker & AWS infrastructure.
-          </p>
-          <div className="flex flex-wrap items-center justify-center gap-4">
-            <Button asChild size="lg">
-              <Link to="/projects">View My Work</Link>
-            </Button>
-            <Button asChild size="lg" variant="outline">
-              <Link to="/resume">View Resume</Link>
-            </Button>
-            <Button asChild size="lg" variant="outline">
-              <Link to="/contact">Contact Me</Link>
-            </Button>
+        {/* Show the hero animation only if it hasn't completed yet */}
+        {animationState !== 'completed' && (
+          <HeroAnimation 
+            videoSrc="/videos/intro-animation.mp4" 
+            duration={10} // This is a fallback duration in seconds if the video doesn't trigger the 'ended' event
+            onComplete={handleAnimationComplete}
+          />
+        )}
+
+        {/* Regular hero content (shown if animation has completed) */}
+        {animationState === 'completed' && (
+          <div className="flex flex-col items-center gap-4 text-center">
+            <Badge className="px-3.5 py-1.5 text-sm" variant="secondary">Mechanical Engineer & Roboticist</Badge>
+            <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl">
+              Pietro Zullo
+            </h1>
+            <p className="max-w-[700px] text-lg text-muted-foreground md:text-xl">
+              Specializing in robotics, motion planning, and full-stack development with Docker & AWS infrastructure.
+            </p>
+            <div className="flex flex-wrap items-center justify-center gap-4">
+              <Button asChild size="lg">
+                <Link to="/projects">View My Work</Link>
+              </Button>
+              <Button asChild size="lg" variant="outline">
+                <Link to="/resume">View Resume</Link>
+              </Button>
+              <Button asChild size="lg" variant="outline">
+                <Link to="/skills">View Skills</Link>
+              </Button>
+              <Button asChild size="lg" variant="outline">
+                <Link to="/contact">Contact Me</Link>
+              </Button>
+            </div>
           </div>
-        </div>
+        )}
       </section>
 
       {/* About Section */}
@@ -41,11 +76,15 @@ export function HomePage() {
           </div>
           <div className="grid gap-8 md:grid-cols-[1fr_2fr]">
             <div className="flex flex-col gap-4">
-              <div className="overflow-hidden rounded-lg">
+              <div className="overflow-hidden rounded-lg bg-white">
                 <img 
-                  src="/profile-image.jpg" 
+                  src="/Alter Ego Team_11.04.2024-093.jpg" 
                   alt="Pietro Zullo" 
-                  className="aspect-square h-full w-full object-cover"
+                  className="aspect-square h-full w-full object-cover mix-blend-multiply"
+                  style={{ 
+                    imageRendering: 'auto',
+                    filter: 'brightness(1.05) contrast(0.95)'
+                  }}
                   onError={(e) => {
                     e.currentTarget.src = "https://via.placeholder.com/400x400?text=Pietro+Zullo";
                   }}
@@ -102,8 +141,9 @@ export function HomePage() {
               </CardHeader>
               <CardContent>
                 <p className="text-sm text-muted-foreground">
-                  Leading the technical development of innovative virtual try-on technology (patent pending CH001377/2024).
-                  Architecting and implementing computer vision and 3D modeling solutions for realistic virtual product visualization.
+                  Leading the technical development of innovative virtual try-on technology 
+                  (patent pending CH001377/2024). Architecting and implementing computer vision 
+                  and 3D modeling solutions for realistic virtual product visualization.
                 </p>
               </CardContent>
             </Card>
@@ -121,7 +161,8 @@ export function HomePage() {
               <CardContent>
                 <p className="text-sm text-muted-foreground">
                   Contributed to autonomous vehicle motion planning and control systems.
-                  Implemented and tested algorithms for safe and efficient autonomous navigation in complex environments.
+                  Implemented and tested algorithms for safe and 
+                  efficient autonomous navigation in complex environments.
                 </p>
               </CardContent>
             </Card>
