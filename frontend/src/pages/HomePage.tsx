@@ -57,11 +57,7 @@ export function HomePage() {
             <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl">
               Pietro Zullo
             </h1>
-            <p className="max-w-[700px] text-lg text-muted-foreground md:text-xl">
-              Specializing in robotics, motion planning, and full-stack development with Docker &
-              AWS infrastructure.
-            </p>
-            <div className="flex flex-wrap items-center justify-center gap-4">
+            {/* <div className="flex flex-wrap items-center justify-center gap-4">
               <Button asChild size="lg">
                 <Link to="/projects">View My Work</Link>
               </Button>
@@ -74,7 +70,7 @@ export function HomePage() {
               <Button asChild size="lg" variant="outline">
                 <Link to="/contact">Contact Me</Link>
               </Button>
-            </div>
+            </div> */}
           </div>
         )}
       </section>

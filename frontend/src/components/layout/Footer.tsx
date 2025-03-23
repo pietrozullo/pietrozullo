@@ -15,9 +15,6 @@ export function Footer() {
       <div className="container flex flex-col gap-8 md:flex-row md:justify-between">
         <div className="flex flex-col gap-2">
           <h3 className="text-lg font-semibold">Pietro Zullo</h3>
-          <p className="text-sm text-muted-foreground max-w-md">
-            Software engineer and web developer passionate about creating elegant solutions to complex problems.
-          </p>
         </div>
         
         <div className="grid grid-cols-2 gap-8 sm:grid-cols-3">
@@ -45,7 +42,7 @@ export function Footer() {
           <div className="flex flex-col gap-2">
             <h4 className="text-sm font-semibold">Contact</h4>
             <Button asChild variant="link" className="h-auto p-0 text-sm text-muted-foreground hover:text-foreground">
-              <a href="mailto:contact@pietrozullo.com">contact@pietrozullo.com</a>
+              <a href="mailto:pietro.zullo@gmail.com">pietro.zullo@gmail.com</a>
             </Button>
             <div className="flex gap-2 mt-2">
               <Button size="icon" variant="ghost" asChild>
@@ -64,7 +61,7 @@ export function Footer() {
                 </a>
               </Button>
               <Button size="icon" variant="ghost" asChild>
-                <a href="mailto:contact@pietrozullo.com" aria-label="Email">
+                <a href="mailto:pietro.zullo@gmail.com" aria-label="Email">
                   <EnvelopeClosedIcon className="h-4 w-4" />
                 </a>
               </Button>
