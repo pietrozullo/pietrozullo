@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Procedural Grass Animation with Three.js</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+        }
+        #info {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 14px;
+            z-index: 100;
+            max-width: 300px;
+        }
+        .control-panel {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            z-index: 100;
+            width: 200px;
+        }
+        .control-panel label, .control-panel input {
+            display: block;
+            margin-bottom: 10px;
+            width: 100%;
+        }
+        .control-panel button {
+            margin-top: 5px;
+            padding: 5px;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div id="info">
+        <h2>Procedural Grass Animation</h2>
+        <p>Use the controls to adjust the grass parameters.</p>
+        <p>Click and drag to rotate view. Scroll to zoom.</p>
+    </div>
+    
+    <div class="control-panel">
+        <label for="windStrength">Wind Strength</label>
+        <input type="range" id="windStrength" min="0" max="1" step="0.01" value="0.3">
+        
+        <label for="grassDensity">Grass Density</label>
+        <input type="range" id="grassDensity" min="1000" max="10000" step="500" value="5000">
+        
+        <label for="grassHeight">Grass Height</label>
+        <input type="range" id="grassHeight" min="0.5" max="2" step="0.1" value="1">
+    </div>
+    
+    <script type="module">
+        import * as THREE from 'https://cdnjs.cloudflare.com/ajax/libs/three.js/0.157.0/three.module.js';
+        import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.157.0/examples/jsm/controls/OrbitControls.js';
+        
+        // Scene setup
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0x87ceeb);
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.shadowMap.enabled = true;
+        document.body.appendChild(renderer.domElement);
+        
+        // Controls
+        const controls = new OrbitControls(camera, renderer.domElement);
+        camera.position.set(0, 3, 6);
+        controls.update();
+        
+        // Lighting
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+        scene.add(ambientLight);
+        
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+        directionalLight.position.set(5, 10, 7.5);
+        directionalLight.castShadow = true;
+        directionalLight.shadow.mapSize.width = 2048;
+        directionalLight.shadow.mapSize.height = 2048;
+        scene.add(directionalLight);
+        
+        // Ground
+        const groundGeometry = new THREE.PlaneGeometry(20, 20, 32, 32);
+        const groundMaterial = new THREE.MeshStandardMaterial({ 
+            color: 0x3a5f0b,
+            roughness: 0.8,
+            metalness: 0.2
+        });
+        const ground = new THREE.Mesh(groundGeometry, groundMaterial);
+        ground.rotation.x = -Math.PI / 2;
+        ground.receiveShadow = true;
+        scene.add(ground);
+        
+        // Parameters (can be controlled by UI)
+        const params = {
+            grassCount: 5000,
+            grassHeight: 1.0,
+            windStrength: 0.3
+        };
+        
+        // Create and add grass
+        let grassMesh;
+        
+        // Create grass using instanced mesh and shader
+        function createProceduralGrass() {
+            // Remove previous grass if it exists
+            if (grassMesh) scene.remove(grassMesh);
+            
+            // Create a single blade geometry
+            const bladeSegments = 5;
+            const bladeGeometry = new THREE.BufferGeometry();
+            
+            // Vertices for a tapered blade shape
+            const vertices = [];
+            const indices = [];
+            
+            const bladeWidth = 0.1;
+            const bladeHeight = 1.0;
+            
+            // Create a blade shape (two triangular faces)
+            for (let i = 0; i <= bladeSegments; i++) {
+                const t = i / bladeSegments;
+                const y = t * bladeHeight;
+                
+                // Taper the width as we go up
+                const width = bladeWidth * (1.0 - t * 0.8);
+                
+                // Add two vertices for each segment level
+                vertices.push(-width/2, y, 0);  // Left side
+                vertices.push(width/2, y, 0);   // Right side
+            }
+            
+            // Create faces (two triangles per segment)
+            for (let i = 0; i < bladeSegments; i++) {
+                const bottomLeft = i * 2;
+                const bottomRight = i * 2 + 1;
+                const topLeft = (i + 1) * 2;
+                const topRight = (i + 1) * 2 + 1;
+                
+                // First triangle
+                indices.push(bottomLeft, bottomRight, topRight);
+                // Second triangle
+                indices.push(bottomLeft, topRight, topLeft);
+            }
+            
+            // Add vertices and indices to geometry
+            bladeGeometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
+            bladeGeometry.setIndex(indices);
+            bladeGeometry.computeVertexNormals();
+            
+            // Create custom shader material
+            const grassVertexShader = `
+                uniform float time;
+                uniform float windStrength;
+                uniform float grassHeight;
+                
+                attribute vec3 offset;
+                attribute float scale;
+                attribute float bend;
+                attribute float phase;
+                attribute vec3 grassColor;
+                
+                varying vec3 vColor;
+                varying float vHeight;
+                
+                // Simple pseudo-random function
+                float rand(vec2 co) {
+                    return fract(sin(dot(co.xy, vec2(12.9898, 78.233))) * 43758.5453);
+                }
+                
+                void main() {
+                    vHeight = position.y;
+                    vColor = grassColor;
+                    
+                    // Clone original position
+                    vec3 pos = position.xyz;
+                    
+                    // Scale blade height
+                    pos.y *= scale * grassHeight;
+                    
+                    // Add blade position offset
+                    pos += offset;
+                    
+                    // Apply wind effect - stronger at the top
+                    float noiseValue = sin(time * 0.5 + offset.x * 0.5 + offset.z * 0.5);
+                    noiseValue += cos(time * 0.3 + offset.z * 0.2);
+                    noiseValue = noiseValue * 0.5 + 0.5;
+                    
+                    // More wind at blade top, multiplied by wind strength
+                    float windEffect = position.y * windStrength * 0.5 * noiseValue * (0.5 + sin(time * 0.5 + phase) * 0.5);
+                    
+                    // Apply natural bend (curve)
+                    float bendFactor = pow(position.y, 2.0) * bend;
+                    
+                    // Apply both effects - wind in X and Z, bend mostly in Z
+                    pos.x += windEffect * sin(time * 0.1 + phase);
+                    pos.z += windEffect * cos(time * 0.1 + phase) + bendFactor * 0.1;
+                    
+                    gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
+                }
+            `;
+
+            const grassFragmentShader = `
+                varying vec3 vColor;
+                varying float vHeight;
+                
+                void main() {
+                    // Calculate shading based on height (darker at bottom)
+                    float shade = mix(0.6, 1.0, vHeight);
+                    
+                    // Add slight variation for interest
+                    gl_FragColor = vec4(vColor * shade, 1.0);
+                }
+            `;
+            
+            // Create material
+            const grassMaterial = new THREE.ShaderMaterial({
+                uniforms: {
+                    time: { value: 0 },
+                    windStrength: { value: params.windStrength },
+                    grassHeight: { value: params.grassHeight }
+                },
+                vertexShader: grassVertexShader,
+                fragmentShader: grassFragmentShader,
+                side: THREE.DoubleSide,
+                transparent: false
+            });
+            
+            // Create instanced attributes for many grass blades
+            const instanceCount = params.grassCount;
+            
+            const offsets = new Float32Array(instanceCount * 3);
+            const scales = new Float32Array(instanceCount);
+            const bends = new Float32Array(instanceCount);
+            const phases = new Float32Array(instanceCount);
+            const colors = new Float32Array(instanceCount * 3);
+            
+            // Distribution radius
+            const radius = 9;
+            
+            // Fill instanced attributes with random values
+            for (let i = 0; i < instanceCount; i++) {
+                // Random position within circle using polar coordinates
+                const angle = Math.random() * Math.PI * 2;
+                const r = Math.sqrt(Math.random()) * radius; // Square root for uniform distribution
+                const x = Math.cos(angle) * r;
+                const z = Math.sin(angle) * r;
+                
+                // Position
+                offsets[i * 3] = x;
+                offsets[i * 3 + 1] = 0;
+                offsets[i * 3 + 2] = z;
+                
+                // Random height
+                scales[i] = 0.7 + Math.random() * 0.6;
+                
+                // Random bend amount
+                bends[i] = 0.1 + Math.random() * 0.2;
+                
+                // Random phase for wind animation
+                phases[i] = Math.random() * Math.PI * 2;
+                
+                // Grass color variations - slightly different shades of green
+                colors[i * 3] = 0.1 + Math.random() * 0.1;                // R
+                colors[i * 3 + 1] = 0.5 + Math.random() * 0.3;            // G
+                colors[i * 3 + 2] = 0.1 + Math.random() * 0.1;            // B
+            }
+            
+            // Create instance buffers
+            bladeGeometry.setAttribute('offset', new THREE.InstancedBufferAttribute(offsets, 3));
+            bladeGeometry.setAttribute('scale', new THREE.InstancedBufferAttribute(scales, 1));
+            bladeGeometry.setAttribute('bend', new THREE.InstancedBufferAttribute(bends, 1));
+            bladeGeometry.setAttribute('phase', new THREE.InstancedBufferAttribute(phases, 1));
+            bladeGeometry.setAttribute('grassColor', new THREE.InstancedBufferAttribute(colors, 3));
+            
+            // Create instanced mesh
+            grassMesh = new THREE.InstancedMesh(bladeGeometry, grassMaterial, instanceCount);
+            grassMesh.castShadow = true;
+            
+            // Add to scene
+            scene.add(grassMesh);
+            
+            return grassMesh;
+        }
+        
+        // Create initial grass
+        createProceduralGrass();
+        
+        // UI Controls
+        document.getElementById('windStrength').addEventListener('input', (e) => {
+            params.windStrength = parseFloat(e.target.value);
+            grassMesh.material.uniforms.windStrength.value = params.windStrength;
+        });
+        
+        document.getElementById('grassHeight').addEventListener('input', (e) => {
+            params.grassHeight = parseFloat(e.target.value);
+            grassMesh.material.uniforms.grassHeight.value = params.grassHeight;
+        });
+        
+        document.getElementById('grassDensity').addEventListener('input', (e) => {
+            params.grassCount = parseInt(e.target.value);
+            createProceduralGrass();
+        });
+        
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+        
+        // Animation loop
+        const clock = new THREE.Clock();
+        
+        function animate() {
+            requestAnimationFrame(animate);
+            
+            const time = clock.getElapsedTime();
+            
+            // Update time uniform for grass shader
+            if (grassMesh && grassMesh.material.uniforms) {
+                grassMesh.material.uniforms.time.value = time;
+            }
+            
+            controls.update();
+            renderer.render(scene, camera);
+        }
+        
+        animate();
+    </script>
+</body>
+</html>

@@ -1,6 +1,13 @@
 import { Link } from "react-router-dom";
 import { Button } from "../components/ui/button";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "../components/ui/card";
 import { Badge } from "../components/ui/badge";
 import { ArrowRightIcon } from "@radix-ui/react-icons";
 import { Separator } from "../components/ui/separator";
@@ -8,22 +15,24 @@ import { HeroAnimation } from "../components/animation/HeroAnimation";
 import { useState, useEffect } from "react";
 
 export function HomePage() {
-  const [animationState, setAnimationState] = useState<'video' | 'transition' | 'completed'>('video');
+  const [animationState, setAnimationState] = useState<"video" | "transition" | "completed">(
+    "video"
+  );
   const [hasAnimationPlayed, setHasAnimationPlayed] = useState(false);
 
   // Check if animation has already played in this session
   useEffect(() => {
-    const hasPlayed = sessionStorage.getItem('heroAnimationPlayed');
+    const hasPlayed = sessionStorage.getItem("heroAnimationPlayed");
     if (hasPlayed) {
-      setAnimationState('completed');
+      setAnimationState("completed");
       setHasAnimationPlayed(true);
     }
   }, []);
 
   // Handle animation completion
   const handleAnimationComplete = () => {
-    setAnimationState('completed');
-    sessionStorage.setItem('heroAnimationPlayed', 'true');
+    setAnimationState("completed");
+    sessionStorage.setItem("heroAnimationPlayed", "true");
   };
 
   return (
@@ -31,23 +40,26 @@ export function HomePage() {
       {/* Hero Section with Animation */}
       <section className="container py-12 md:py-24 lg:py-32">
         {/* Show the hero animation only if it hasn't completed yet */}
-        {animationState !== 'completed' && (
-          <HeroAnimation 
-            videoSrc="/videos/intro-animation.mp4" 
+        {animationState !== "completed" && (
+          <HeroAnimation
+            videoSrc="/videos/intro-animation.mp4"
             duration={10} // This is a fallback duration in seconds if the video doesn't trigger the 'ended' event
             onComplete={handleAnimationComplete}
           />
         )}
 
         {/* Regular hero content (shown if animation has completed) */}
-        {animationState === 'completed' && (
+        {animationState === "completed" && (
           <div className="flex flex-col items-center gap-4 text-center">
-            <Badge className="px-3.5 py-1.5 text-sm" variant="secondary">Mechanical Engineer & Roboticist</Badge>
+            <Badge className="px-3.5 py-1.5 text-sm" variant="secondary">
+              Mechanical Engineer & Roboticist
+            </Badge>
             <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl">
               Pietro Zullo
             </h1>
             <p className="max-w-[700px] text-lg text-muted-foreground md:text-xl">
-              Specializing in robotics, motion planning, and full-stack development with Docker & AWS infrastructure.
+              Specializing in robotics, motion planning, and full-stack development with Docker &
+              AWS infrastructure.
             </p>
             <div className="flex flex-wrap items-center justify-center gap-4">
               <Button asChild size="lg">
@@ -77,13 +89,13 @@ export function HomePage() {
           <div className="grid gap-8 md:grid-cols-[1fr_2fr]">
             <div className="flex flex-col gap-4">
               <div className="overflow-hidden rounded-lg bg-white">
-                <img 
-                  src="/Alter Ego Team_11.04.2024-093.jpg" 
-                  alt="Pietro Zullo" 
+                <img
+                  src="/Alter Ego Team_11.04.2024-093.jpg"
+                  alt="Pietro Zullo"
                   className="aspect-square h-full w-full object-cover mix-blend-multiply"
-                  style={{ 
-                    imageRendering: 'auto',
-                    filter: 'brightness(1.05) contrast(0.95)'
+                  style={{
+                    imageRendering: "auto",
+                    filter: "brightness(1.05) contrast(0.95)",
                   }}
                   onError={(e) => {
                     e.currentTarget.src = "https://via.placeholder.com/400x400?text=Pietro+Zullo";
@@ -94,16 +106,19 @@ export function HomePage() {
             <div className="flex flex-col gap-6">
               <div className="prose max-w-none dark:prose-invert">
                 <p>
-                  Hello! I'm Pietro, a mechanical engineer specializing in robotics and motion planning.
-                  I also have experience in full-stack web development and cloud infrastructure.
+                  Hello! I'm Pietro, a mechanical engineer specializing in robotics and motion
+                  planning. I also have experience in full-stack web development and cloud
+                  infrastructure.
                 </p>
                 <p>
-                  My primary expertise is in control systems and motion planning for robotics applications.
-                  I've worked on projects involving multi-agent systems, autonomous vehicles, and haptic devices.
+                  My primary expertise is in control systems and motion planning for robotics
+                  applications. I've worked on projects involving multi-agent systems, autonomous
+                  vehicles, and haptic devices.
                 </p>
                 <p>
-                  In addition to my engineering background, I've developed skills in web development and infrastructure,
-                  working with technologies like TypeScript, React, Docker, and AWS.
+                  In addition to my engineering background, I've developed skills in web development
+                  and infrastructure, working with technologies like TypeScript, React, Docker, and
+                  AWS.
                 </p>
               </div>
               <div className="flex justify-start">
@@ -124,9 +139,7 @@ export function HomePage() {
           <div className="flex flex-col gap-2">
             <h2 className="text-3xl font-bold tracking-tighter">Experience</h2>
             <Separator className="my-2" />
-            <p className="text-muted-foreground">
-              Highlights from my professional journey
-            </p>
+            <p className="text-muted-foreground">Highlights from my professional journey</p>
           </div>
           <div className="flex flex-col gap-6">
             <Card>
@@ -141,13 +154,13 @@ export function HomePage() {
               </CardHeader>
               <CardContent>
                 <p className="text-sm text-muted-foreground">
-                  Leading the technical development of innovative virtual try-on technology 
-                  (patent pending CH001377/2024). Architecting and implementing computer vision 
-                  and 3D modeling solutions for realistic virtual product visualization.
+                  Leading the technical development of innovative virtual try-on technology (patent
+                  pending CH001377/2024). Architecting and implementing computer vision and 3D
+                  modeling solutions for realistic virtual product visualization.
                 </p>
               </CardContent>
             </Card>
-            
+
             <Card>
               <CardHeader>
                 <div className="flex items-start justify-between">
@@ -160,13 +173,13 @@ export function HomePage() {
               </CardHeader>
               <CardContent>
                 <p className="text-sm text-muted-foreground">
-                  Contributed to autonomous vehicle motion planning and control systems.
-                  Implemented and tested algorithms for safe and 
-                  efficient autonomous navigation in complex environments.
+                  Contributed to autonomous vehicle motion planning and control systems. Implemented
+                  and tested algorithms for safe and efficient autonomous navigation in complex
+                  environments.
                 </p>
               </CardContent>
             </Card>
-            
+
             <div className="flex justify-center">
               <Button asChild variant="outline" className="gap-1">
                 <Link to="/resume">
@@ -184,9 +197,7 @@ export function HomePage() {
           <div className="flex flex-col gap-2">
             <h2 className="text-3xl font-bold tracking-tighter">Featured Projects</h2>
             <Separator className="my-2" />
-            <p className="text-muted-foreground">
-              A selection of my recent work and research
-            </p>
+            <p className="text-muted-foreground">A selection of my recent work and research</p>
           </div>
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {/* AlterEgo Project */}
@@ -197,8 +208,8 @@ export function HomePage() {
               </CardHeader>
               <CardContent>
                 <p className="text-sm text-muted-foreground">
-                  A virtual fitting room that allows users to try on clothes virtually before purchasing.
-                  Featured in ETH Zurich news and patent pending (CH001377/2024).
+                  A virtual fitting room that allows users to try on clothes virtually before
+                  purchasing. Featured in ETH Zurich news and patent pending (CH001377/2024).
                 </p>
                 <div className="mt-4 flex flex-wrap gap-2">
                   <Badge variant="secondary">Computer Vision</Badge>
@@ -223,8 +234,8 @@ export function HomePage() {
               </CardHeader>
               <CardContent>
                 <p className="text-sm text-muted-foreground">
-                  Novel method to solve multi-agent motion planning problems efficiently using a mathematical framework 
-                  to detect and leverage independence between agents.
+                  Novel method to solve multi-agent motion planning problems efficiently using a
+                  mathematical framework to detect and leverage independence between agents.
                 </p>
                 <div className="mt-4 flex flex-wrap gap-2">
                   <Badge variant="secondary">Motion Planning</Badge>
@@ -250,7 +261,8 @@ export function HomePage() {
               <CardContent>
                 <p className="text-sm text-muted-foreground">
                   Refined NMPCC controller for high performance driving using MATLAB and SIMULINK.
-                  Collaborated with IDSC Zurich, UniPD, and UniNA on commercial vehicle control software.
+                  Collaborated with IDSC Zurich, UniPD, and UniNA on commercial vehicle control
+                  software.
                 </p>
                 <div className="mt-4 flex flex-wrap gap-2">
                   <Badge variant="secondary">Control Systems</Badge>
@@ -365,7 +377,6 @@ export function HomePage() {
           </div>
         </div>
       </section>
-
     </div>
   );
-} 
+}
