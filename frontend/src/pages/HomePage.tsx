@@ -90,7 +90,7 @@ export function HomePage() {
             <div className="flex flex-col gap-4">
               <div className="overflow-hidden rounded-lg bg-white">
                 <img
-                  src="/Alter Ego Team_11.04.2024-093.jpg"
+                  src="/profile.jpg"
                   alt="Pietro Zullo"
                   className="aspect-square h-full w-full object-cover mix-blend-multiply"
                   style={{
