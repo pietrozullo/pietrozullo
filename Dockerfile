@@ -1,7 +1,7 @@
 FROM node:20-alpine as frontend-builder
 
 WORKDIR /app/frontend
-COPY frontend/pietrozullo/ ./
+COPY frontend/ ./
 RUN npm install --legacy-peer-deps
 RUN npm run build
 
