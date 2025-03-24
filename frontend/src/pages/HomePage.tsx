@@ -1,11 +1,6 @@
 import { Link } from "react-router-dom";
 import { Button } from "../components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "../components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card";
 import { Badge } from "../components/ui/badge";
 import { ArrowRightIcon } from "@radix-ui/react-icons";
 import { Separator } from "../components/ui/separator";
@@ -17,6 +12,7 @@ import {
   FactorizationProject,
   MPCProject,
 } from "../components/cards";
+import { GitHubLogoIcon, LinkedInLogoIcon, TwitterLogoIcon } from "@radix-ui/react-icons";
 
 export function HomePage() {
   const [animationState, setAnimationState] = useState<"video" | "transition" | "completed">(
@@ -61,20 +57,46 @@ export function HomePage() {
             <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl">
               Pietro Zullo
             </h1>
-            {/* <div className="flex flex-wrap items-center justify-center gap-4">
-              <Button asChild size="lg">
-                <Link to="/projects">View My Work</Link>
-              </Button>
-              <Button asChild size="lg" variant="outline">
-                <Link to="/resume">View Resume</Link>
-              </Button>
-              <Button asChild size="lg" variant="outline">
-                <Link to="/skills">View Skills</Link>
-              </Button>
-              <Button asChild size="lg" variant="outline">
-                <Link to="/contact">Contact Me</Link>
-              </Button>
-            </div> */}
+            <div className="flex items-center gap-4">
+              <a
+                href="https://linkedin.com/in/pietrozullo"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-muted-foreground hover:text-foreground transition-colors"
+              >
+                <LinkedInLogoIcon className="h-6 w-6" />
+              </a>
+              <a
+                href="https://github.com/pietrozullo"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-muted-foreground hover:text-foreground transition-colors"
+              >
+                <GitHubLogoIcon className="h-6 w-6" />
+              </a>
+              <a
+                href="https://scholar.google.com/citations?user=bd9ugd4AAAAJ&hl=en"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-muted-foreground hover:text-foreground transition-colors"
+              >
+                <svg
+                  viewBox="0 0 24 24"
+                  className="h-6 w-6 fill-current"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path d="M12 24a7 7 0 1 1 0-14 7 7 0 0 1 0 14Zm0-24L0 9.5l4.838 3.94A8 8 0 0 1 12 9a8 8 0 0 1 7.162 4.44L24 9.5 12 0Z" />
+                </svg>
+              </a>
+              <a
+                href="https://x.com/pietrozullo"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-muted-foreground hover:text-foreground transition-colors"
+              >
+                <TwitterLogoIcon className="h-6 w-6" />
+              </a>
+            </div>
           </div>
         )}
       </section>
