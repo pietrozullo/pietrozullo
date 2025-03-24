@@ -10,7 +10,6 @@ import {
   TwitterLogoIcon,
   EnvelopeClosedIcon,
   HomeIcon,
-  MobileIcon,
 } from "@radix-ui/react-icons";
 
 export function ContactPage() {

@@ -3,8 +3,6 @@ import { Button } from "../components/ui/button";
 import {
   Card,
   CardContent,
-  CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "../components/ui/card";
@@ -13,6 +11,12 @@ import { ArrowRightIcon } from "@radix-ui/react-icons";
 import { Separator } from "../components/ui/separator";
 import { HeroAnimation } from "../components/animation/HeroAnimation";
 import { useState, useEffect } from "react";
+import {
+  AlterEgoExperience,
+  MotionalExperience,
+  FactorizationProject,
+  MPCProject,
+} from "../components/cards";
 
 export function HomePage() {
   const [animationState, setAnimationState] = useState<"video" | "transition" | "completed">(
@@ -138,43 +142,8 @@ export function HomePage() {
             <p className="text-muted-foreground">Highlights from my professional journey</p>
           </div>
           <div className="flex flex-col gap-6">
-            <Card>
-              <CardHeader>
-                <div className="flex items-start justify-between">
-                  <div>
-                    <CardTitle>Founder & CTO</CardTitle>
-                    <CardDescription>AlterEgo</CardDescription>
-                  </div>
-                  <Badge variant="outline">2023 - Present</Badge>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-muted-foreground">
-                  Leading the technical development of innovative virtual try-on technology (patent
-                  pending CH001377/2024). Architecting and implementing computer vision and 3D
-                  modeling solutions for realistic virtual product visualization.
-                </p>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <div className="flex items-start justify-between">
-                  <div>
-                    <CardTitle>Research Engineer Intern</CardTitle>
-                    <CardDescription>Motional</CardDescription>
-                  </div>
-                  <Badge variant="outline">2022</Badge>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-muted-foreground">
-                  Contributed to autonomous vehicle motion planning and control systems. Implemented
-                  and tested algorithms for safe and efficient autonomous navigation in complex
-                  environments.
-                </p>
-              </CardContent>
-            </Card>
+            <AlterEgoExperience />
+            <MotionalExperience />
 
             <div className="flex justify-center">
               <Button asChild variant="outline" className="gap-1">
@@ -195,85 +164,9 @@ export function HomePage() {
             <Separator className="my-2" />
             <p className="text-muted-foreground">A selection of my recent work and research</p>
           </div>
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {/* AlterEgo Project */}
-            <Card>
-              <CardHeader>
-                <CardTitle>AlterEgo</CardTitle>
-                <CardDescription>Virtual Try-on Technology</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-muted-foreground">
-                  A virtual fitting room that allows users to try on clothes virtually before
-                  purchasing. Featured in ETH Zurich news and patent pending (CH001377/2024).
-                </p>
-                <div className="mt-4 flex flex-wrap gap-2">
-                  <Badge variant="secondary">Computer Vision</Badge>
-                  <Badge variant="secondary">3D Modeling</Badge>
-                  <Badge variant="secondary">AR</Badge>
-                </div>
-              </CardContent>
-              <CardFooter>
-                <Button asChild variant="ghost" className="gap-1">
-                  <Link to="/alterego">
-                    View Project <ArrowRightIcon className="h-4 w-4" />
-                  </Link>
-                </Button>
-              </CardFooter>
-            </Card>
-
-            {/* Motion Planning Project */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Multi-Agent Motion Planning</CardTitle>
-                <CardDescription>Master Thesis Research</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-muted-foreground">
-                  Novel method to solve multi-agent motion planning problems efficiently using a
-                  mathematical framework to detect and leverage independence between agents.
-                </p>
-                <div className="mt-4 flex flex-wrap gap-2">
-                  <Badge variant="secondary">Motion Planning</Badge>
-                  <Badge variant="secondary">Game Theory</Badge>
-                  <Badge variant="secondary">Graph Theory</Badge>
-                </div>
-              </CardContent>
-              <CardFooter>
-                <Button asChild variant="ghost" className="gap-1">
-                  <Link to="/projects">
-                    View Project <ArrowRightIcon className="h-4 w-4" />
-                  </Link>
-                </Button>
-              </CardFooter>
-            </Card>
-
-            {/* MPC Project */}
-            <Card>
-              <CardHeader>
-                <CardTitle>High Performance Driving</CardTitle>
-                <CardDescription>Model Predictive Control</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-muted-foreground">
-                  Refined NMPCC controller for high performance driving using MATLAB and SIMULINK.
-                  Collaborated with IDSC Zurich, UniPD, and UniNA on commercial vehicle control
-                  software.
-                </p>
-                <div className="mt-4 flex flex-wrap gap-2">
-                  <Badge variant="secondary">Control Systems</Badge>
-                  <Badge variant="secondary">MATLAB</Badge>
-                  <Badge variant="secondary">SIMULINK</Badge>
-                </div>
-              </CardContent>
-              <CardFooter>
-                <Button asChild variant="ghost" className="gap-1">
-                  <Link to="/projects">
-                    View Project <ArrowRightIcon className="h-4 w-4" />
-                  </Link>
-                </Button>
-              </CardFooter>
-            </Card>
+          <div className="flex flex-col gap-6">
+            <FactorizationProject />
+            <MPCProject />
           </div>
           <div className="flex justify-center">
             <Button asChild variant="outline" className="gap-1">

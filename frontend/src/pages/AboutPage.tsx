@@ -28,10 +28,6 @@ export function AboutPage() {
                   }}
                 />
               </div>
-              <div className="flex flex-col gap-2">
-                <h3 className="text-lg font-semibold">Pietro Zullo</h3>
-                <p className="text-sm text-muted-foreground">Mechanical Engineer & Roboticist</p>
-              </div>
             </div>
 
             <div className="flex flex-col gap-6">

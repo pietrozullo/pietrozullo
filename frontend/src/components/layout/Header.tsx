@@ -1,14 +1,11 @@
 import { Link } from "react-router-dom";
 import { 
   NavigationMenu, 
-  NavigationMenuContent, 
   NavigationMenuItem, 
   NavigationMenuLink, 
   NavigationMenuList, 
-  NavigationMenuTrigger,
   navigationMenuTriggerStyle
 } from "../ui/navigation-menu";
-import { cn } from "../../lib/utils";
 import { Button } from "../ui/button";
 
 export function Header() {
