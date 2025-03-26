@@ -39,66 +39,71 @@ export function HomePage() {
     <div className="flex flex-col gap-12 py-8 md:py-12">
       {/* Hero Section with Animation */}
       <section className="container py-12 md:py-24 lg:py-32">
-        {/* Show the hero animation only if it hasn't completed yet */}
-        {animationState !== "completed" && (
-          <HeroAnimation
-            videoSrc="/videos/intro-animation.mp4"
-            duration={10} // This is a fallback duration in seconds if the video doesn't trigger the 'ended' event
-            onComplete={handleAnimationComplete}
-          />
-        )}
-
-        {/* Regular hero content (shown if animation has completed) */}
-        {animationState === "completed" && (
-          <div className="flex flex-col items-center gap-4 text-center">
-            <Badge className="px-3.5 py-1.5 text-sm" variant="secondary">
-              Mechanical Engineer & Roboticist
-            </Badge>
-            <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl">
-              Pietro Zullo
-            </h1>
-            <div className="flex items-center gap-4">
-              <a
-                href="https://linkedin.com/in/pietrozullo"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-muted-foreground hover:text-foreground transition-colors"
-              >
-                <LinkedInLogoIcon className="h-6 w-6" />
-              </a>
-              <a
-                href="https://github.com/pietrozullo"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-muted-foreground hover:text-foreground transition-colors"
-              >
-                <GitHubLogoIcon className="h-6 w-6" />
-              </a>
-              <a
-                href="https://scholar.google.com/citations?user=bd9ugd4AAAAJ&hl=en"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-muted-foreground hover:text-foreground transition-colors"
-              >
-                <svg
-                  viewBox="0 0 24 24"
-                  className="h-6 w-6 fill-current"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path d="M12 24a7 7 0 1 1 0-14 7 7 0 0 1 0 14Zm0-24L0 9.5l4.838 3.94A8 8 0 0 1 12 9a8 8 0 0 1 7.162 4.44L24 9.5 12 0Z" />
-                </svg>
-              </a>
-              <a
-                href="https://x.com/pietrozullo"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-muted-foreground hover:text-foreground transition-colors"
-              >
-                <TwitterLogoIcon className="h-6 w-6" />
-              </a>
-            </div>
+        <div className="relative h-[540px] w-full">
+          <div
+            className={`absolute inset-0 transition-opacity duration-500 ${
+              animationState !== "completed" ? "opacity-100" : "opacity-0"
+            }`}
+          >
+            <HeroAnimation
+              videoSrc="/videos/output.mp4"
+              duration={10}
+              onComplete={handleAnimationComplete}
+            />
           </div>
-        )}
+
+          {/* Regular hero content (shown if animation has completed) */}
+          {animationState === "completed" && (
+            <div className="flex h-full flex-col items-center justify-center gap-4 text-center">
+              <Badge className="px-3.5 py-1.5 text-sm" variant="secondary">
+                Mechanical Engineer & Roboticist
+              </Badge>
+              <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl">
+                Pietro Zullo
+              </h1>
+              <div className="flex items-center gap-4">
+                <a
+                  href="https://linkedin.com/in/pietrozullo"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  <LinkedInLogoIcon className="h-6 w-6" />
+                </a>
+                <a
+                  href="https://github.com/pietrozullo"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  <GitHubLogoIcon className="h-6 w-6" />
+                </a>
+                <a
+                  href="https://scholar.google.com/citations?user=bd9ugd4AAAAJ&hl=en"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  <svg
+                    viewBox="0 0 24 24"
+                    className="h-6 w-6 fill-current"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path d="M12 24a7 7 0 1 1 0-14 7 7 0 0 1 0 14Zm0-24L0 9.5l4.838 3.94A8 8 0 0 1 12 9a8 8 0 0 1 7.162 4.44L24 9.5 12 0Z" />
+                  </svg>
+                </a>
+                <a
+                  href="https://x.com/pietrozullo"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  <TwitterLogoIcon className="h-6 w-6" />
+                </a>
+              </div>
+            </div>
+          )}
+        </div>
       </section>
 
       {/* About Section */}
