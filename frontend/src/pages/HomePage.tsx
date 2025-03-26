@@ -42,7 +42,9 @@ export function HomePage() {
         <div className="relative h-[540px] w-full">
           <div
             className={`absolute inset-0 transition-opacity duration-500 ${
-              animationState !== "completed" ? "opacity-100" : "opacity-0"
+              animationState !== "completed"
+                ? "opacity-100 pointer-events-auto"
+                : "opacity-0 pointer-events-none"
             }`}
           >
             <HeroAnimation
@@ -54,7 +56,7 @@ export function HomePage() {
 
           {/* Regular hero content (shown if animation has completed) */}
           {animationState === "completed" && (
-            <div className="flex h-full flex-col items-center justify-center gap-4 text-center">
+            <div className="relative flex h-full flex-col items-center justify-center gap-4 text-center">
               <Badge className="px-3.5 py-1.5 text-sm" variant="secondary">
                 Mechanical Engineer & Roboticist
               </Badge>
